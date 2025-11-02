@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 144, 226, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+            animation: backgroundShift 15s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: rgba(15, 20, 45, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 25px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .profile-section h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-section .reg-no {
+            font-size: 13px;
+            color: #a0aec0;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-section .department {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-section {
+            margin-top: 20px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item .icon {
+            font-size: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 50px;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 80px 40px;
+            background: rgba(15, 20, 45, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        .welcome-section h2 {
+            font-size: 48px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .welcome-section p {
+            color: #cbd5e0;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .welcome-highlight {
+            margin-top: 30px;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .card {
+            background: rgba(15, 20, 45, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .diagram-container {
+            background: rgba(10, 14, 39, 0.8);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .diagram-title {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .block-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .block {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 18px 35px;
+            min-width: 220px;
+            text-align: center;
+            font-weight: 600;
+            color: #e2e8f0;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 20px solid #667eea;
+            position: relative;
+            filter: drop-shadow(0 3px 6px rgba(102, 126, 234, 0.4));
+        }
+
+        .arrow::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: -1px;
+            width: 2px;
+            height: 30px;
+            background: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+        }
+
+        .flow-row {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .horizontal-arrow {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            position: relative;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+        }
+
+        .horizontal-arrow::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #764ba2;
+        }
+
+        .explanation {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 10px;
+            line-height: 1.9;
+            color: #cbd5e0;
+        }
+
+        .explanation h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .explanation p {
+            margin-bottom: 15px;
+        }
+
+        .spec-list {
+            background: rgba(10, 14, 39, 0.6);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .spec-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 15px;
+        }
+
+        .spec-value {
+            color: #cbd5e0;
+            font-size: 14px;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 14, 39, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .flow-row {
+                flex-direction: column;
+            }
+
+            .horizontal-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile-section">
+                <div class="profile-icon">H</div>
+                <h1>HARSHITH</h1>
+                <div class="reg-no">RA2311003011557</div>
+                <div class="department">Computing Technologies</div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <div class="nav-item active" onclick="showSection('home')">
+                    <span class="icon">🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" onclick="showSection('tidal')">
+                    <span class="icon">🌊</span>
+                    <span>Activity 1: Tidal Power</span>
+                </div>
+                <div class="nav-item" onclick="showSection('biomass')">
+                    <span class="icon">🌾</span>
+                    <span>Activity 2: Biomass Biogas</span>
+                </div>
+                <div class="nav-item" onclick="showSection('geothermal')">
+                    <span class="icon">🌋</span>
+                    <span>Activity 3: Geothermal Power</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Home Section -->
+            <div id="home" class="content-section active">
+                <div class="welcome-section">
+                    <h2>Welcome to My Portfolio</h2>
+                    <p>This portfolio showcases three innovative renewable energy system designs as part of my academic project on sustainable power generation.</p>
+                    <p>Explore comprehensive block diagrams, technical specifications, and detailed explanations for Tidal Power Plants, Biomass Biogas Systems, and Geothermal Power Plants.</p>
+                    <div class="welcome-highlight">👈 Select an activity from the navigation menu to begin exploring</div>
+                </div>
+            </div>
+
+            <!-- Tidal Power Section -->
+            <div id="tidal" class="content-section">
+                <h2 class="section-title">Activity 1: Tidal Power Plant for Coastal Village</h2>
+                
+                <div class="card">
+                    <div class="diagram-container">
+                        <div class="diagram-title">Block Diagram - Tidal Power Plant</div>
+                        <div class="block-diagram">
+                            <div class="block">Tidal Basin / Barrage Structure</div>
+                            <div class="arrow"></div>
+                            <div class="block">Water Flow Control (Sluice Gates)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Turbine System (Bulb/Kaplan Type)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Generator (AC Output)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Transformer & Power Conditioning</div>
+                            <div class="arrow"></div>
+                            <div class="flow-row">
+                                <div class="block">Battery Storage (Optional)</div>
+                                <div class="horizontal-arrow"></div>
+                                <div class="block">Grid Integration / Village Distribution</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">500 kW - 2 MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Tidal Range Required:</span>
+                            <span class="spec-value">Minimum 5 meters</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Turbine Type:</span>
+                            <span class="spec-value">Low-head Kaplan or Bulb Turbines</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Power Generation:</span>
+                            <span class="spec-value">4 cycles per day (2 high tides, 2 low tides)</span>
+                        </div>
+                    </div>
+
+                    <div class="explanation">
+                        <h3>System Explanation</h3>
+                        <p><strong>Source of Energy:</strong> The system harnesses kinetic and potential energy from tidal movements caused by gravitational forces of the moon and sun. Coastal areas with significant tidal ranges (difference between high and low tide) are ideal locations.</p>
+                        
+                        <p><strong>Conversion Process:</strong> A barrage or dam structure is built across a tidal estuary, creating a basin. During high tide, sluice gates open to fill the basin. When the tide recedes, the gates close, creating a head difference. Water is then released through low-head turbines (typically bulb or Kaplan type), which rotate due to water pressure. These turbines are connected to generators that convert mechanical energy into electrical energy through electromagnetic induction.</p>
+                        
+                        <p><strong>Output and Utilization:</strong> The system generates AC electricity (typically 11 kV), which is stepped up via transformers for transmission to the coastal village grid. Optional battery storage systems can store excess energy during peak generation for use during slack tide periods, ensuring continuous power supply.</p>
+                        
+                        <p><strong>Real-World Application:</strong> Tidal power is highly predictable compared to solar and wind energy, making it reliable for baseload power in coastal communities. The La Rance Tidal Power Station in France (240 MW) and the Sihwa Lake Tidal Power Station in South Korea (254 MW) are successful examples. For a coastal village, this technology provides sustainable, emission-free electricity while supporting local fishing and tourism industries with minimal environmental impact when properly designed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biomass Section -->
+            <div id="biomass" class="content-section">
+                <h2 class="section-title">Activity 2: Biomass Biogas System for Dairy Farm</h2>
+                
+                <div class="card">
+                    <div class="diagram-container">
+                        <div class="diagram-title">Block Diagram - Biogas Generation System</div>
+                        <div class="block-diagram">
+                            <div class="block">Cattle Waste Collection (100 cattle)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Pre-treatment Unit (Mixing + Water)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Anaerobic Digester (Fixed Dome/Floating Drum)</div>
+                            <div class="arrow"></div>
+                            <div class="flow-row">
+                                <div class="block">Biogas Storage Tank</div>
+                                <div class="horizontal-arrow"></div>
+                                <div class="block">Gas Purification (H₂S & CO₂ Removal)</div>
+                            </div>
+                            <div class="arrow"></div>
+                            <div class="flow-row">
+                                <div class="block">Cooking Gas Supply</div>
+                                <div class="block">Biogas Generator (Electricity)</div>
+                                <div class="block">Heating Applications</div>
+                            </div>
+                            <div class="arrow"></div>
+                            <div class="block">Slurry Outlet (Bio-fertilizer)</div>
+                        </div>
+                    </div>
+
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <span class="spec-label">Daily Cattle Waste:</span>
+                            <span class="spec-value">1000-1200 kg (10-12 kg per cattle)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Digester Capacity:</span>
+                            <span class="spec-value">75-100 m³</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Biogas Production:</span>
+                            <span class="spec-value">40-50 m³ per day</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Retention Time:</span>
+                            <span class="spec-value">30-40 days</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Methane Content:</span>
+                            <span class="spec-value">55-65%</span>
+                        </div>
+                    </div>
+
+                    <div class="explanation">
+                        <h3>System Explanation</h3>
+                        <p><strong>Source of Energy:</strong> The system utilizes cattle dung and agricultural waste as biomass feedstock. A dairy farm with 100 cattle produces approximately 1000-1200 kg of manure daily, which contains organic matter rich in carbon and nutrients suitable for anaerobic digestion.</p>
+                        
+                        <p><strong>Conversion Process:</strong> The collected cattle waste is mixed with water in a 1:1 ratio in the pre-treatment unit to create slurry. This slurry is fed into an anaerobic digester (typically fixed dome or floating drum type), where methanogenic bacteria break down organic matter in oxygen-free conditions at 30-35°C. The process produces biogas (55-65% methane, 30-40% CO₂, and traces of H₂S) over a retention period of 30-40 days. The biogas passes through a purification unit to remove hydrogen sulfide and carbon dioxide, improving its calorific value to approximately 5000-5500 kcal/m³.</p>
+                        
+                        <p><strong>Output and Utilization:</strong> The purified biogas can be used for multiple purposes: cooking fuel (replacing LPG), electricity generation through biogas generators (approximately 10-15 kW capacity), and heating applications for farm operations. The spent slurry exits as high-quality organic bio-fertilizer rich in nitrogen, phosphorus, and potassium, which can be used for crop cultivation or sold as additional revenue.</p>
+                        
+                        <p><strong>Real-World Application:</strong> This system addresses waste management, energy needs, and fertilizer requirements simultaneously. Similar systems are successfully operating in dairy farms across India (Amul dairy cooperatives), Netherlands, and Germany. The dairy farm becomes energy self-sufficient, reduces greenhouse gas emissions (methane that would otherwise escape to atmosphere), and creates a circular economy by converting waste into valuable energy and fertilizer, improving farm profitability and sustainability.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geothermal Section -->
+            <div id="geothermal" class="content-section">
+                <h2 class="section-title">Activity 3: Geothermal Power Plant System</h2>
+                
+                <div class="card">
+                    <div class="diagram-container">
+                        <div class="diagram-title">Block Diagram - Geothermal Power Plant (Binary Cycle)</div>
+                        <div class="block-diagram">
+                            <div class="block">Geothermal Reservoir (Hot Water Wells 150-180°C)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Production Well & Pumping System</div>
+                            <div class="arrow"></div>
+                            <div class="block">Heat Exchanger (Primary Loop)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Working Fluid Vaporization (Organic Rankine Cycle)</div>
+                            <div class="arrow"></div>
+                            <div class="block">Vapor Turbine</div>
+                            <div class="arrow"></div>
+                            <div class="block">Generator (3-Phase AC)</div>
+                            <div class="arrow"></div>
+                            <div class="flow-row">
+                                <div class="block">Condenser (Air/Water Cooled)</div>
+                                <div class="horizontal-arrow"></div>
+                                <div class="block">Working Fluid Recycling</div>
+                            </div>
+                            <div class="arrow"></div>
+                            <div class="flow-row">
+                                <div class="block">Injection Well (Return Cooled Water)</div>
+                                <div class="horizontal-arrow"></div>
+                                <div class="block">Transformer & Grid Connection</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <span class="spec-label">Plant Type:</span>
+                            <span class="spec-value">Binary Cycle (for moderate temperature)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Well Temperature:</span>
+                            <span class="spec-value">150-180°C</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Typical Capacity:</span>
+                            <span class="spec-value">5-50 MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Working Fluid:</span>
+                            <span class="spec-value">Isobutane or Isopentane</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Efficiency:</span>
+                            <span class="spec-value">10-13%</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Capacity Factor:</span>
+                            <span class="spec-value">90-95% (Base load operation)</span>
+                        </div>
+                    </div>
+
+                    <div class="explanation">
+                        <h3>System Explanation</h3>
+                        <p><strong>Source of Energy:</strong> The system taps into geothermal energy from hot water reservoirs located 1-3 km below the earth's surface. These reservoirs exist in regions with volcanic activity or tectonic plate boundaries where the earth's geothermal gradient is higher, maintaining water temperatures between 150-180°C. The heat originates from radioactive decay of minerals and residual heat from earth's formation.</p>
+                        
+                        <p><strong>Conversion Process:</strong> Production wells extract hot geothermal water using submersible pumps. In a binary cycle system, this hot water passes through a heat exchanger where it transfers thermal energy to a secondary working fluid (typically organic compounds like isobutane or isopentane with low boiling points). The working fluid vaporizes and expands through a turbine, causing rotation. The turbine drives a synchronous generator that produces three-phase AC electricity at 11 kV. After passing through the turbine, the working fluid vapor enters a condenser where it's cooled and liquefied (using air or water cooling), then recycled back to the heat exchanger. The cooled geothermal water is reinjected into the reservoir through injection wells, maintaining reservoir pressure and sustainability.</p>
+                        
+                        <p><strong>Output and Utilization:</strong> The system generates continuous baseload electricity with a capacity factor of 90-95%, significantly higher than intermittent sources like solar or wind. The generated electricity at 11 kV is stepped up to transmission voltage (66 kV or higher) via transformers and fed into the regional grid. Excess heat from the cooled geothermal water can be utilized for district heating, greenhouse agriculture, or industrial processes.</p>
+                        
+                        <p><strong>Real-World Application:</strong> Binary cycle plants are ideal for moderate-temperature geothermal resources and have minimal environmental impact with near-zero emissions. Successful implementations include the Mammoth Lakes plant in California, Hellisheiði Power Station in Iceland, and Wayang Windu in Indonesia. These plants provide reliable, renewable baseload power with a small land footprint. For regions with hot water wells, geothermal energy offers energy independence, economic development through job creation, and a pathway to carbon neutrality. The technology is mature, proven, and can operate 24/7 regardless of weather conditions, making it an excellent complement to variable renewable sources.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(sectionId).classList.add('active');
+            event.target.closest('.nav-item').classList.add('active');
+
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
